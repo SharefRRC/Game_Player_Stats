@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game Player Stats Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111827;
+      color: #f9fafb;
+      margin: 0;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      color: #60a5fa;
+    }
+
+    .card {
+      background: #1f2937;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+    }
+
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 0.7rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-right: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    pre {
+      background: #0f172a;
+      padding: 1rem;
+      border-radius: 10px;
+      overflow-x: auto;
+    }
+
+    select {
+      padding: 0.6rem;
+      border-radius: 8px;
+      margin-right: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Game Player Stats Tracker</h1>
+
+    <div class="card">
+      <button id="loadPlayersBtn">Load All Players</button>
+
+      <select id="playerSelect">
+        <option value="1">ShadowStrike</option>
+        <option value="2">NoobMaster</option>
+        <option value="3">ProGamer99</option>
+      </select>
+
+      <button id="viewPlayerBtn">View Player</button>
+      <button id="viewRatingBtn">View Rating</button>
+    </div>
+
+    <div class="card">
+      <h2>Response</h2>
+      <pre id="output">Click a button to load data...</pre>
+    </div>
+  </div>
+
+  <script>
+    const output = document.getElementById("output");
+    const playerSelect = document.getElementById("playerSelect");
+    const loadPlayersBtn = document.getElementById("loadPlayersBtn");
+    const viewPlayerBtn = document.getElementById("viewPlayerBtn");
+    const viewRatingBtn = document.getElementById("viewRatingBtn");
+
+    const displayData = (data) => {
+      output.textContent = JSON.stringify(data, null, 2);
+    };
+
+    loadPlayersBtn.addEventListener("click", async () => {
+      const response = await fetch("/api/v1/players");
+      const data = await response.json();
+      displayData(data);
+    });
+
+    viewPlayerBtn.addEventListener("click", async () => {
+      const id = playerSelect.value;
+      const response = await fetch(`/api/v1/players/${id}`);
+      const data = await response.json();
+      displayData(data);
+    });
+
+    viewRatingBtn.addEventListener("click", async () => {
+      const id = playerSelect.value;
+      const response = await fetch(`/api/v1/players/${id}/rating`);
+      const data = await response.json();
+      displayData(data);
+    });
+  </script>
+</body>
+</html>
