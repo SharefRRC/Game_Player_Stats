@@ -1,17 +1,23 @@
 import { players } from "../data/players";
 import { Player, PlayerRating } from "../interfaces/player";
 
-export const getAllPlayers = (): Player[] => {
+
+export function getAllPlayers(): Player[] {
   return players;
-};
+}
 
-export const getPlayerById = (id: number): Player | undefined => {
-  return players.find((player) => player.id === id);
-};
 
-export const calculatePlayerRating = (player: Player): PlayerRating => {
+export function getPlayerById(id: number): Player | undefined {
+  return players.find(function (player: Player) {
+    return player.id === id;
+  });
+}
+
+
+export function calculatePlayerRating(player: Player): PlayerRating {
   const gamesPlayed = player.wins + player.losses;
 
+  // Handle edge case: no games played
   if (gamesPlayed === 0) {
     return {
       id: player.id,
@@ -21,6 +27,7 @@ export const calculatePlayerRating = (player: Player): PlayerRating => {
     };
   }
 
+  // Calculate rating
   const rating =
     (player.wins / gamesPlayed) * 100 + player.totalScore / gamesPlayed;
 
@@ -28,11 +35,13 @@ export const calculatePlayerRating = (player: Player): PlayerRating => {
     id: player.id,
     name: player.name,
     rating: Number(rating.toFixed(2)),
-    gamesPlayed
+    gamesPlayed: gamesPlayed
   };
-};
+}
 
-export const getPlayerRatingById = (id: number): PlayerRating | undefined => {
+
+
+export function getPlayerRatingById(id: number): PlayerRating | undefined {
   const player = getPlayerById(id);
 
   if (!player) {
@@ -40,4 +49,4 @@ export const getPlayerRatingById = (id: number): PlayerRating | undefined => {
   }
 
   return calculatePlayerRating(player);
-};
+}
